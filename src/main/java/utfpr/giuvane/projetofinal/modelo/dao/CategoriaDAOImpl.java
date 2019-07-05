@@ -126,8 +126,8 @@ public class CategoriaDAOImpl implements CategoriaDAO{
         Root<Categoria> root = cq.from(Categoria.class);
         cq.select(root);
         
-        // Criando um Predicate (Similar ao WHERE)
-        Predicate predicate = cb.like(root.get("nome"), like);
+        // Criando um Predicate (Filtro utilizado no WHERE)
+        Predicate predicate = cb.like(root.get("nome"), "%"+like+"%");
         cq.where(predicate);
         
         TypedQuery<Categoria> query = manager.createQuery(cq);

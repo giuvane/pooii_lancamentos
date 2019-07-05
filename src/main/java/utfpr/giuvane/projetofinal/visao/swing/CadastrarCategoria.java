@@ -5,19 +5,10 @@
  */
 package utfpr.giuvane.projetofinal.visao.swing;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.hibernate.HibernateException;
 import utfpr.giuvane.projetofinal.modelo.rn.CategoriaRN;
 import utfpr.giuvane.projetofinal.modelo.vo.Categoria;
 
@@ -30,13 +21,14 @@ public class CadastrarCategoria extends javax.swing.JInternalFrame {
     /**
      * Creates new form ConsultaCliente
      */
-    Long idAlteracao=0L;
+    private Long idAlteracao = 0L;
     private CategoriaRN categoriaRN;
-    private Categoria cat = new Categoria();
-    private List<String> subcategorias = new ArrayList<String>();
+    private Categoria cat;
+    private List<String> subcategorias = new ArrayList<>();
     
     public CadastrarCategoria() {
-        categoriaRN = new CategoriaRN();
+        this.categoriaRN = new CategoriaRN();
+        this.cat = new Categoria();
         initComponents();
     }
     
@@ -44,39 +36,21 @@ public class CadastrarCategoria extends javax.swing.JInternalFrame {
         initComponents();
         this.idAlteracao = idAlteracao;
         categoriaRN = new CategoriaRN();
+        this.cat = new Categoria();
         try{
-            Categoria catFind = categoriaRN.listarUm(idAlteracao);
-            txtID.setText(String.valueOf(catFind.getCodigo()));
-            txtNome.setText(catFind.getNome());
+            Categoria catRecuperada = categoriaRN.listarUm(idAlteracao);
+            txtID.setText(String.valueOf(catRecuperada.getCodigo()));
+            txtNome.setText(catRecuperada.getNome());
             
+            // Popula Subcategorias
             DefaultTableModel model = (DefaultTableModel) jtSubcategorias.getModel();
             model.setNumRows(0);
-            
-            for (String sub : catFind.getSubCategorias()) {
+            for (String sub : catRecuperada.getSubCategorias()) {
                 String[] linha = { sub };
                 model.addRow(linha);
                 this.subcategorias.add(sub);
             }
             
-//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","admin");
-//            String sql = "select * from Cliente where IdCliente = ? ";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            stmt.setInt(1, idAlteracao);
-//            ResultSet rs = stmt.executeQuery();
-//            while(rs.next()){
-//                txtID.setText(rs.getString("IDCliente"));
-//                txtID.setEnabled(false);
-//                txtNome.setText(rs.getString("Nome"));
-//                txtDDD.setText(rs.getString("DDD"));
-//                txtTelefone.setText(rs.getString("Telefone"));
-//                txtEmail.setText(rs.getString("Email"));
-//                txtCPF.setText(rs.getString("CPF"));
-//                txtRG.setText(rs.getString("RG"));
-//                java.util.Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("DtNascimento"));
-//                txtDtnascimento.setText(new SimpleDateFormat("dd/MM/yyyy").format(dt));
-//            }
-//            stmt.close();
-//            con.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e);
         }
@@ -236,56 +210,16 @@ public class CadastrarCategoria extends javax.swing.JInternalFrame {
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         // TODO add your handling code here:
         try{
-            if(idAlteracao == 0){
-                
-//                Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-//                        + "test","root","admin");  
-//                String sql = "insert into Cliente(Nome,Telefone,DDD,Email,CPF,RG,"
-//                        + "DtNascimento) values (?,?,?,?,?,?,?)";
-//                PreparedStatement stmt = con.prepareStatement(sql);
-                
-                
+            if(this.idAlteracao == 0){
                 this.cat.setNome(this.txtNome.getText());
                 this.cat.setSubCategorias(this.subcategorias);
                 
                 categoriaRN.salvar(cat);
-                
-//                stmt.setString(1, this.txtNome.getText());
-//                stmt.setInt(2, Integer.parseInt(this.txtTelefone.getText()));
-//                stmt.setInt(3, Integer.parseInt(this.txtDDD.getText()));
-//                stmt.setString(4, this.txtEmail.getText());
-//                stmt.setString(5, this.txtCPF.getText());
-//                stmt.setString(6, this.txtRG.getText());
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd"); 
-//                Date dt = new Date(df.parse(txtDtnascimento.getText()).getTime());
-//                stmt.setDate(7, dt);
-//                stmt.execute();
-//                stmt.close();
-//                con.close();
             }else{
-                Categoria catFind = categoriaRN.listarUm(idAlteracao);
-                catFind.setNome(this.txtNome.getText());
-                catFind.setSubCategorias(subcategorias);
-                categoriaRN.atualizar(catFind);
-                
-//                Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-//                        + "test","root","admin");  
-//                String sql = "update Cliente set Nome=?,Telefone=?,DDD=?,Email=?"
-//                        + ",CPF=?,RG=?,DtNascimento=? where idCliente = ?";
-//                PreparedStatement stmt = con.prepareStatement(sql);
-//                stmt.setString(1, this.txtNome.getText());
-//                stmt.setInt(2, Integer.parseInt(this.txtTelefone.getText()));
-//                stmt.setInt(3, Integer.parseInt(this.txtDDD.getText()));
-//                stmt.setString(4, this.txtEmail.getText());
-//                stmt.setString(5, this.txtCPF.getText());
-//                stmt.setString(6, this.txtRG.getText());
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd"); 
-//                Date dt = new Date(df.parse(txtDtnascimento.getText()).getTime());
-//                stmt.setDate(7, dt);
-//                stmt.setInt(8, idAlteracao);
-//                stmt.execute();
-//                stmt.close();
-//                con.close();
+                Categoria catRecuperada = categoriaRN.listarUm(idAlteracao);
+                catRecuperada.setNome(this.txtNome.getText());
+                catRecuperada.setSubCategorias(subcategorias);
+                categoriaRN.atualizar(catRecuperada);
             }
             JOptionPane.showMessageDialog(this, "Categoria Cadastrada com Sucesso!");
             this.dispose();

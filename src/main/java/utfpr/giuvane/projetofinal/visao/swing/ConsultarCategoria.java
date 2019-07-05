@@ -5,17 +5,7 @@
  */
 package utfpr.giuvane.projetofinal.visao.swing;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,16 +18,13 @@ import utfpr.giuvane.projetofinal.modelo.vo.Categoria;
  */
 public class ConsultarCategoria extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ConsultarCliente
-     */
-    
     private CategoriaRN categoriaRN;
     private JDesktopPane jdpPrincipal;
+    
     public ConsultarCategoria(JDesktopPane jdp) {
-        initComponents();
         jdpPrincipal = jdp;
         categoriaRN = new CategoriaRN();
+        initComponents(); 
     }
 
     /**
@@ -67,12 +54,6 @@ public class ConsultarCategoria extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(600, 400));
 
         jLabel2.setText("Nome:");
-
-        txtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeActionPerformed(evt);
-            }
-        });
 
         btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/find.png"))); // NOI18N
         btPesquisar.setText("Pesquisar");
@@ -179,10 +160,6 @@ public class ConsultarCategoria extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
-
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -209,26 +186,6 @@ public class ConsultarCategoria extends javax.swing.JInternalFrame {
                 model.addRow(linha);
             }
             
-            
-//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","admin");
-//            String sql = "select * from Cliente ";
-//            if(!txtNome.getText().equals(""))
-//                sql = sql + " where Nome LIKE ? ";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//            if(!txtNome.getText().equals(""))
-//                stmt.setString(1, "%"+txtNome.getText()+"%");
-//            ResultSet rs = stmt.executeQuery();
-//            DefaultTableModel model = (DefaultTableModel) jtCliente.getModel();
-//            model.setNumRows(0);
-//            while(rs.next()){
-//                String[] linha = {rs.getString("IDCliente"), rs.getString("Nome"),
-//                    rs.getString("DDD"),rs.getString("Telefone"),rs.getString("Email"),
-//                    rs.getString("CPF"),rs.getString("RG"), rs.getString("DtNascimento") };
-//                model.addRow(linha);
-//            }
-//            
-//            stmt.close();
-//            con.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e);
         }
@@ -236,25 +193,17 @@ public class ConsultarCategoria extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
-        // TODO add your handling code here:
+
         try{
-//            Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-//                    + "test","root","admin");  
-//            String sql = "delete from Cliente where IDCliente = ?";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-            
             int linha = this.jtCategoria.getSelectedRow();
             Long id = Long.valueOf(jtCategoria.getValueAt(linha, 0).toString());
             
-            Categoria catFind = categoriaRN.listarUm(id);
-            categoriaRN.excluir(catFind);
-//            stmt.setInt(1, Integer.parseInt(jtCliente.getValueAt(linha, 0).toString()));
-//            stmt.execute();
-//            stmt.close();
-//            con.close();
+            Categoria catRecuperada = categoriaRN.listarUm(id);
+            categoriaRN.excluir(catRecuperada);
+
             DefaultTableModel model = (DefaultTableModel) jtCategoria.getModel();
             model.removeRow(linha);
-            JOptionPane.showMessageDialog(this, "Categoria Excluída com Sucesso!");
+            JOptionPane.showMessageDialog(this, "Categoria excluída com sucesso!");
             this.setClosable(true);
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, e);
@@ -264,11 +213,11 @@ public class ConsultarCategoria extends javax.swing.JInternalFrame {
     
     
     private void btAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAlterarActionPerformed
-        // TODO add your handling code here:
+
         int linha = this.jtCategoria.getSelectedRow();
         Long id = Long.parseLong(jtCategoria.getValueAt(linha, 0).toString());
         CadastrarCategoria cadastrarCategoria = new CadastrarCategoria(id);
-        jdpPrincipal.add(cadastrarCategoria);
+        this.jdpPrincipal.add(cadastrarCategoria);
         cadastrarCategoria.setVisible(true);
     }//GEN-LAST:event_btAlterarActionPerformed
 

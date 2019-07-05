@@ -36,7 +36,7 @@ public class CategoriaRN {
     }
     
     public List<Categoria> listaFiltroLike(String like) {
-        return categoriaDao.listarFiltroLike(like);
+        return categoriaDao.listarFiltroLikeCriteria(like);
     }
     
     public List<Categoria> listaTodos() {

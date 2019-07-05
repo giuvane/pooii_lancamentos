@@ -5,17 +5,7 @@
  */
 package utfpr.giuvane.projetofinal.visao.swing;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -32,12 +22,13 @@ public class ConsultarCliente extends javax.swing.JInternalFrame {
      * Creates new form ConsultarCliente
      */
     private JDesktopPane jdpPrincipal;
-    private ClienteRN clienteRN = new ClienteRN();
+    private ClienteRN clienteRN;
     private List<Cliente> clientes;
     
     public ConsultarCliente(JDesktopPane jdp) {
-        initComponents();
+        clienteRN = new ClienteRN();
         jdpPrincipal = jdp;
+        initComponents();
     }
 
     /**

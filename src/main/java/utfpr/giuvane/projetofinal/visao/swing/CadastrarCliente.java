@@ -24,53 +24,36 @@ import utfpr.giuvane.projetofinal.modelo.vo.Endereco;
  */
 public class CadastrarCliente extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ConsultaCliente
-     */
-    Long idAlteracao=0L;
-    ClienteRN clienteRN = new ClienteRN();
-    Cliente cli = new Cliente();
-    Endereco end = new Endereco();
+    private Long idAlteracao = 0L;
+    private ClienteRN clienteRN;
+    private Cliente cli;
+    private Endereco end;
     
     public CadastrarCliente() {
+        this.clienteRN = new ClienteRN();
+        this.cli = new Cliente();
+        this.end = new Endereco();
         initComponents();
     }
     
     public CadastrarCliente(Long idAlteracao) {
+        this.clienteRN = new ClienteRN();
+        this.cli = new Cliente();
+        this.end = new Endereco();
         initComponents();
         this.idAlteracao = idAlteracao;
         try{
-            Cliente cliFind = clienteRN.listarUm(idAlteracao);
-            txtID.setText(String.valueOf(cliFind.getCodigo()));
-            txtNome.setText(cliFind.getNome());
-            txtBairro.setText(cliFind.getEndereco().getBairro());
-            txtCEP.setText(cliFind.getEndereco().getCep());
-            txtCidade.setText(cliFind.getEndereco().getCidade());
-            txtComplemento.setText(cliFind.getEndereco().getComplemento());
-            txtEstado.setText(cliFind.getEndereco().getEstado());
-            txtLogradouro.setText(cliFind.getEndereco().getLogradouro());
-            txtNumero.setText(cliFind.getEndereco().getNumero());
-            checkAtivo.setSelected(cliFind.getAtivo());
-            
-//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","admin");
-//            String sql = "select * from Cliente where IdCliente = ? ";
-//            PreparedStatement stmt = con.prepareStatement(sql);
-//           //stmt.setInt(1, idAlteracao);
-//            ResultSet rs = stmt.executeQuery();
-//            while(rs.next()){
-//                txtID.setText(rs.getString("IDCliente"));
-//                txtID.setEnabled(false);
-//                txtNome.setText(rs.getString("Nome"));
-//                txtLogradouro.setText(rs.getString("DDD"));
-//                //txtTelefone.setText(rs.getString("Telefone"));
-//                txtComplemento.setText(rs.getString("Email"));
-//                txtBairro.setText(rs.getString("CPF"));
-//                txtCEP.setText(rs.getString("RG"));
-//                java.util.Date dt = new SimpleDateFormat("yyyy-MM-dd").parse(rs.getString("DtNascimento"));
-//                txtCidade.setText(new SimpleDateFormat("dd/MM/yyyy").format(dt));
-//            }
-//            stmt.close();
-//            con.close();
+            Cliente cliRecuperado = clienteRN.listarUm(idAlteracao);
+            txtID.setText(String.valueOf(cliRecuperado.getCodigo()));
+            txtNome.setText(cliRecuperado.getNome());
+            txtBairro.setText(cliRecuperado.getEndereco().getBairro());
+            txtCEP.setText(cliRecuperado.getEndereco().getCep());
+            txtCidade.setText(cliRecuperado.getEndereco().getCidade());
+            txtComplemento.setText(cliRecuperado.getEndereco().getComplemento());
+            txtEstado.setText(cliRecuperado.getEndereco().getEstado());
+            txtLogradouro.setText(cliRecuperado.getEndereco().getLogradouro());
+            txtNumero.setText(cliRecuperado.getEndereco().getNumero());
+            checkAtivo.setSelected(cliRecuperado.getAtivo());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e);
         }
@@ -119,24 +102,6 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
 
         txtID.setEditable(false);
 
-        txtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeActionPerformed(evt);
-            }
-        });
-
-        txtLogradouro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLogradouroActionPerformed(evt);
-            }
-        });
-
-        txtComplemento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtComplementoActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("ID:");
 
         jLabel2.setText("Nome:");
@@ -174,11 +139,6 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
         jLabel10.setText("Status:");
 
         checkAtivo.setText("Ativo");
-        checkAtivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkAtivoActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -279,22 +239,10 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
-
-    private void txtLogradouroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLogradouroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLogradouroActionPerformed
-
-    private void txtComplementoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComplementoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtComplementoActionPerformed
-
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
-        // TODO add your handling code here:
+
         try{
-            if(idAlteracao == 0){
+            if(this.idAlteracao == 0){
                 cli.setNome(this.txtNome.getText());
                 cli.setAtivo(checkAtivo.isSelected());
                 end.setBairro(txtBairro.getText());
@@ -307,28 +255,10 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
                 cli.setEndereco(end);
                 
                 this.clienteRN.salvar(cli);
-                
-//                Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-//                        + "test","root","admin");  
-//                String sql = "insert into Cliente(Nome,Telefone,DDD,Email,CPF,RG,"
-//                        + "DtNascimento) values (?,?,?,?,?,?,?)";
-//                PreparedStatement stmt = con.prepareStatement(sql);
-//                stmt.setString(1, this.txtNome.getText());
-//                stmt.setInt(2, Integer.parseInt(this.txtTelefone.getText()));
-//                stmt.setInt(3, Integer.parseInt(this.txtLogradouro.getText()));
-//                stmt.setString(4, this.txtComplemento.getText());
-//                stmt.setString(5, this.txtBairro.getText());
-//                stmt.setString(6, this.txtCEP.getText());
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd"); 
-//                Date dt = new Date(df.parse(txtCidade.getText()).getTime());
-//                stmt.setDate(7, dt);
-//                stmt.execute();
-//                stmt.close();
-//                con.close();
             }else{
-                Cliente cliFind = clienteRN.listarUm(idAlteracao);
-                cliFind.setNome(this.txtNome.getText());
-                cliFind.setAtivo(checkAtivo.isSelected());
+                Cliente cliRecuperado = clienteRN.listarUm(idAlteracao);
+                cliRecuperado.setNome(this.txtNome.getText());
+                cliRecuperado.setAtivo(checkAtivo.isSelected());
                 end.setBairro(txtBairro.getText());
                 end.setCep(txtCEP.getText());
                 end.setCidade(txtCidade.getText());
@@ -336,30 +266,11 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
                 end.setEstado(txtEstado.getText());
                 end.setLogradouro(txtLogradouro.getText());
                 end.setNumero(txtNumero.getText());
-                cliFind.setEndereco(end);
+                cliRecuperado.setEndereco(end);
                 
-                clienteRN.atualizar(cliFind);
-                
-//                Connection con =  DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-//                        + "test","root","admin");  
-//                String sql = "update Cliente set Nome=?,Telefone=?,DDD=?,Email=?"
-//                        + ",CPF=?,RG=?,DtNascimento=? where idCliente = ?";
-//                PreparedStatement stmt = con.prepareStatement(sql);
-//                stmt.setString(1, this.txtNome.getText());
-//                //stmt.setInt(2, Integer.parseInt(this.txtTelefone.getText()));
-//                stmt.setInt(3, Integer.parseInt(this.txtLogradouro.getText()));
-//                stmt.setString(4, this.txtComplemento.getText());
-//                stmt.setString(5, this.txtBairro.getText());
-//                stmt.setString(6, this.txtCEP.getText());
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd"); 
-//                Date dt = new Date(df.parse(txtCidade.getText()).getTime());
-//                stmt.setDate(7, dt);
-//                //stmt.setInt(8, idAlteracao);
-//                stmt.execute();
-//                stmt.close();
-//                con.close();
+                clienteRN.atualizar(cliRecuperado);
             }
-            JOptionPane.showMessageDialog(this, "Cliente Cadastrado com Sucesso!");
+            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
             this.dispose();
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, e);
@@ -371,10 +282,6 @@ public class CadastrarCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
-
-    private void checkAtivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAtivoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_checkAtivoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

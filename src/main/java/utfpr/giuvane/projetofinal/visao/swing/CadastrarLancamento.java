@@ -6,16 +6,8 @@
 package utfpr.giuvane.projetofinal.visao.swing;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +22,7 @@ import utfpr.giuvane.projetofinal.modelo.vo.Categoria;
 import utfpr.giuvane.projetofinal.modelo.vo.Cliente;
 import utfpr.giuvane.projetofinal.modelo.vo.Lancamento;
 import utfpr.giuvane.projetofinal.modelo.vo.TipoLancamento;
+import utfpr.giuvane.projetofinal.util.DataUtil;
 
 /**
  *
@@ -37,19 +30,19 @@ import utfpr.giuvane.projetofinal.modelo.vo.TipoLancamento;
  */
 public class CadastrarLancamento extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ConsultaCliente
-     */
-    Long idAlteracao=0L;
-    List<Categoria> categorias;
-    CategoriaRN categoriaRN = new CategoriaRN();
-    List<Cliente> clientes;
-    ClienteRN clienteRN = new ClienteRN();
-    Lancamento lancamento;
-    LancamentoRN lancamentoRN = new LancamentoRN();
-    Lancamento lancamentoAlteracao;
+    private Long idAlteracao = 0L;
+    private List<Categoria> categorias;
+    private CategoriaRN categoriaRN;
+    private List<Cliente> clientes;
+    private ClienteRN clienteRN;
+    private Lancamento lancamento;
+    private LancamentoRN lancamentoRN;
+    private Lancamento lancamentoAlteracao;
     
     public CadastrarLancamento() {
+        this.categoriaRN = new CategoriaRN();
+        this.clienteRN = new ClienteRN();
+        this.lancamentoRN = new LancamentoRN();
         initComponents();
         this.popularComboCategoria();
         this.popularComboTipoLancamento();
@@ -66,13 +59,11 @@ public class CadastrarLancamento extends javax.swing.JInternalFrame {
             txtObservacao.setText(lancamentoAlteracao.getObservacao());
             txtValor.setText(String.valueOf(lancamentoAlteracao.getValor()));
             
-            LocalDate ldPagamento = lancamentoAlteracao.getDataPagamento();
-            Date datePagamento = Date.from(ldPagamento.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            dateDtPagamento.setDate(datePagamento);
+            // Converte LocalDate para Date, para popular JCalendar
+            dateDtPagamento.setDate(DataUtil.converteLocalDateToDate(lancamentoAlteracao.getDataPagamento()));
             
-            LocalDate ldVenc = lancamentoAlteracao.getDataVencimento();
-            Date dateVenc = Date.from(ldVenc.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            dateDtVencimento.setDate(dateVenc);
+            // Converte LocalDate para Date, para popular JCalendar
+            dateDtVencimento.setDate(DataUtil.converteLocalDateToDate(lancamentoAlteracao.getDataVencimento()));
             
             popularComboClienteEdicao(idAlteracao);
             //comboCliente.setSelectedItem(lancamentoAlteracao.getCliente());
@@ -266,7 +257,7 @@ public class CadastrarLancamento extends javax.swing.JInternalFrame {
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         // TODO add your handling code here:
         try{
-            if(idAlteracao == 0){
+            if(this.idAlteracao == 0){
                 lancamento = new Lancamento();
                 lancamento.setCategoria((Categoria)this.getCategoriaSelecionada(comboCategoria.getSelectedIndex()));
                 lancamento.setCliente((Cliente)this.getClienteSelecionado(comboCliente.getSelectedIndex()));
@@ -306,7 +297,7 @@ public class CadastrarLancamento extends javax.swing.JInternalFrame {
                 lancamentoRN.atualizar(lancamentoAlteracao);
                 
             }
-            JOptionPane.showMessageDialog(this, "Lançamento Cadastrado com Sucesso!");
+            JOptionPane.showMessageDialog(this, "Lançamento cadastrado com sucesso!");
             this.dispose();
         }catch(Exception e){
             JOptionPane.showMessageDialog(this, e);
